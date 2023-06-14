@@ -1,0 +1,91 @@
+.LoginPage {
+  background: #aaa;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(-45deg, #7758d5, #6085b6);
+}
+
+
+.LoginWindow {
+  flex: 0 0 auto;
+  width: 350px;
+  margin: 0 0 300px 0;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 2px 2px 8px rgba(#000, .3);
+
+  h1 {
+    text-align: center;
+    font-size: 24px;
+    margin: 0;
+    padding: 20px;
+    border-bottom: 1px solid #ddd;
+    color: #444;
+  }
+}
+
+.LoginForm {
+  padding: 10px 30px;
+  display: flex;
+  flex-direction: column;
+
+  &__Field {
+    display: block;
+    margin: 12px 0;
+    text-align: center;
+  }
+
+  label {
+    display: block;
+  }
+
+  input[type=text],
+  input[type=password] {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1.5px solid #aaa;
+    outline: none;
+    font-size: 15px;
+    padding: 7px 5px;
+    text-align: left;
+
+    &::placeholder {
+      color: #ccc;
+    }
+
+    &:focus {
+      border-bottom: 1.5px solid #5473c4;
+    }
+  }
+
+  &__error {
+    display: block;
+    margin: 12px 0;
+    background: #ff8c8c;
+    color: #fff;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 3px;
+  }
+
+  button[type=submit] {
+    border: none;
+    padding: 8px;
+    min-width: 120px;
+    background: #5473c4;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin: 10px 0 0 0;
+
+    &:disabled {
+      background: #aaa;
+    }
+  }
+}

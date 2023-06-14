@@ -1,0 +1,37 @@
+.Logs {
+  padding: 10px;
+
+  table {
+    border-collapse: collapse;
+    td {
+      padding: 5px;
+      font-family: "Courier", monospace;
+      font-size: 12px;
+      vertical-align: top;
+      border: 1px solid #aaa;
+    }
+    th {
+      font-size: 12px;
+      vertical-align: top;
+      border: 1px solid #aaa;
+    }
+  }
+
+  &__Danger {
+    td {
+      background: #ffd1d1;
+    }
+  }
+
+  &__LoadMore {
+    background: #d1fff5;
+    padding: 10px;
+
+    button {
+      font-weight: normal;
+      border: none;
+      background: none;
+      text-decoration: underline;
+    }
+  }
+}

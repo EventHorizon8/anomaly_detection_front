@@ -1,9 +1,17 @@
 import Image from 'next/image'
 import styles from './page.module.css'
+import TestChart from "@/component/TestChart";
 
 export default function Home() {
+
   return (
     <main className={styles.main}>
+      <div>
+        <TestChart />
+
+        1111111i87261534891235674 98237 fldiasugfkuhgkvadhjsgbfdv,djacv,mashbef
+      </div>
+
       <div className={styles.description}>
         <p>
           Get started by editing&nbsp;

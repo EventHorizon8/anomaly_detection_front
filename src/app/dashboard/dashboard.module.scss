@@ -1,0 +1,38 @@
+.Dashboard {
+  &__Switches {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    button {
+      display: inline-block;
+      padding: 0 10px;
+      border: none;
+      background: none;
+    }
+
+    &_Selected {
+      font-weight: bold;
+      background: #ccc;
+    }
+  }
+
+  &__Row {
+    display: flex;
+  }
+
+  &__Cell {
+    flex: 0 0 50%;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  &__Header {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  &__Chart {
+    min-height: 200px;
+    background: #eee;
+  }
+}
