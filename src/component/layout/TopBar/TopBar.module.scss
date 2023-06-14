@@ -1,0 +1,22 @@
+.TopBar {
+  height: 40px;
+  background: #396aa6;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  &__Menu {
+    flex: 1 1 auto;
+  }
+  &__UserName {
+    flex: 0 0 auto;
+    padding: 0 10px;
+    border-right: 1px solid #fff;
+  }
+
+  &__Exit {
+    flex: 0 0 auto;
+    padding: 0 10px;
+    font-size: 12px;
+    color: #fff;
+  }
+}
