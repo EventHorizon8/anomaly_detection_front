@@ -1,11 +1,13 @@
 import {combineReducers} from "redux";
 import accountSlice from "./account/account-slice";
 import clientsSlice from "./clients/clients-slice";
+import logsSlice from "./logs/logs-slice";
 import {configureStore} from "@reduxjs/toolkit";
 
 const reducerList = combineReducers({
   account: accountSlice,
   clients: clientsSlice,
+  logs: logsSlice,
 });
 
 export const store = configureStore({

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import ClientsSliceInterface from "@/type/slice/ClientsSliceInterface";
 import {loadClientList, loadClientStats} from "@/store/clients/clients-thunks";
 import ClientInterface from "@/type/ClientInterface";
@@ -6,6 +6,7 @@ import BeClientDataInterface from "@/type/BeData/BeClientDataInterface";
 import {ClientStatsInterface} from "@/type/ClientStatsInterface";
 
 const initialClientsState: ClientsSliceInterface = {
+  timePeriod: 30 * 60,
   clientList: null,
   clientStats: {},
 };
@@ -16,6 +17,12 @@ const clientsSlice = createSlice({
   reducers: {
     cleanAllStats: (state) => {
       state.clientStats = {};
+    },
+    setTimePeriod: (
+      state,
+      { payload }: PayloadAction<{timePeriod: number}>
+    ) => {
+      state.timePeriod = payload.timePeriod;
     },
   },
   extraReducers: (builder) => {
@@ -46,7 +53,8 @@ const clientsSlice = createSlice({
 });
 
 export const {
-  cleanAllStats
+  cleanAllStats,
+  setTimePeriod,
 } = clientsSlice.actions;
 
 export default clientsSlice.reducer;

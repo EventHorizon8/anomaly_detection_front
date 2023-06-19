@@ -1,18 +1,28 @@
 .Dashboard {
+  h1 {
+    text-align: center;
+  }
   &__Switches {
     padding: 10px;
     display: flex;
     align-items: center;
     button {
+      font-size: 16px;
       display: inline-block;
-      padding: 0 10px;
+      padding: 3px 10px;
       border: none;
       background: none;
+      cursor: pointer;
+
+      &:hover {
+        background: #eee;
+      }
     }
 
-    &_Selected {
+    &_Selected,
+    button#{&}_Selected, {
       font-weight: bold;
-      background: #ccc;
+      background: #eee;
     }
   }
 

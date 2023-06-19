@@ -9,6 +9,7 @@ if (/\/$/.test(apiEndpoint)) {
 const config = {
   env: {
     apiEndpoint,
+    demoMode: !!parseInt(process.env.NEXT_PUBLIC_DEMO_MODE || '0', 10)
   }
 }
 

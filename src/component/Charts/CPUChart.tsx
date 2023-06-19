@@ -6,20 +6,28 @@ import {ClientChartStatsInterface} from "@/type/ClientStatsInterface";
 import moment from "moment";
 
 const CPUChart: React.FC<{
-  title: string,
   chartStats: ClientChartStatsInterface[],
+  clientId: number,
+  handleChartClick: (clientId: number, dateTime: string) => any
 }> = (
   {
-    title,
     chartStats,
+    clientId,
+    handleChartClick,
   }
 ) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
   const options: Highcharts.Options = useMemo(() => {
     return {
+      accessibility: {
+        enabled: false,
+      },
       chart: {
         height: '300px',
+        zooming: {
+          type: 'x',
+        },
       },
       title: {
         text: 'CPU utilization',
@@ -28,8 +36,7 @@ const CPUChart: React.FC<{
         categories: chartStats.map((statRecord) => {
           return moment(statRecord.dateTime).format('HH:mm');
         }),
-
-        crosshair: true
+        crosshair: true,
       }],
       yAxis: [{ // Primary yAxis
         labels: {
@@ -69,10 +76,16 @@ const CPUChart: React.FC<{
         data: chartStats.map((statRecord) => statRecord.cpu),
         tooltip: {
           valueSuffix: '%'
-        }
+        },
+        cursor: 'pointer',
+        events: {
+          click: (event) => {
+            handleChartClick(clientId, chartStats[event.point.x].dateTime);
+          }
+        },
       }]
     }
-  }, [chartStats]);
+  }, [chartStats, clientId, handleChartClick]);
 
   return (
     <HighchartsReact

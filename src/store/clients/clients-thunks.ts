@@ -32,15 +32,18 @@ export const loadClientList = createAsyncThunk<
 
 export const loadClientStats = createAsyncThunk<
   any,
-  { clientIdList: number[]; },
+  {
+    clientIdList: number[],
+    timePeriod: number,
+  },
   { state: RootState }
 >(
   "client/loadClientStats",
-  async ({ clientIdList }, { rejectWithValue }) => {
+  async ({ clientIdList, timePeriod }, { rejectWithValue }) => {
     try {
       return clientIdList.map((clientId) => ({
         clientId,
-        stats: generateClientStatsDemo(.5 * 60 * 60, .60),
+        stats: generateClientStatsDemo(timePeriod, .01),
       }));
     } catch (err) {
       const error = err as AxiosError;

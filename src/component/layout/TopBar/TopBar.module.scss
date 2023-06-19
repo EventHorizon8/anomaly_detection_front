@@ -6,6 +6,12 @@
   align-items: center;
   &__Menu {
     flex: 1 1 auto;
+
+    a {
+      text-decoration: none;
+      color: #fff;
+      margin: 0 10px;
+    }
   }
   &__UserName {
     flex: 0 0 auto;

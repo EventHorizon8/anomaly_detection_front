@@ -5,7 +5,7 @@ import React, {useMemo, useRef} from "react";
 import {ClientChartStatsInterface} from "@/type/ClientStatsInterface";
 import moment from "moment";
 
-const NetworkingChart: React.FC<{
+const DiskIoChart: React.FC<{
   chartStats: ClientChartStatsInterface[],
   clientId: number,
   handleChartClick: (clientId: number, dateTime: string) => any
@@ -30,7 +30,7 @@ const NetworkingChart: React.FC<{
         },
       },
       title: {
-        text: 'Networking IO',
+        text: 'Disk IO',
       },
       xAxis: [{
         categories: chartStats.map((statRecord) => {
@@ -44,7 +44,7 @@ const NetworkingChart: React.FC<{
           format: '{value}MB',
         },
         title: {
-          text: 'Networking IO',
+          text: 'Disk IO',
         },
       }, { // Secondary yAxis
         title: {
@@ -70,9 +70,9 @@ const NetworkingChart: React.FC<{
         data: chartStats.map((statRecord) => statRecord.anomalyCount),
         color: '#ce1c1c',
       }, {
-        name: 'Networking IO',
+        name: 'Disk IO',
         type: 'spline',
-        data: chartStats.map((statRecord) => statRecord.networkIo),
+        data: chartStats.map((statRecord) => statRecord.diskIo),
         tooltip: {
           valueSuffix: 'MB'
         },
@@ -95,6 +95,6 @@ const NetworkingChart: React.FC<{
   )
 }
 
-export default NetworkingChart;
+export default DiskIoChart;
 
 

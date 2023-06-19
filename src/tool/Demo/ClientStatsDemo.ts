@@ -26,7 +26,7 @@ export const generateClientStatsDemo = (
       freeRam: 16000 - ram,
       networkIo: Math.round(Math.random() * 50),
       diskSpace: 12.3,
-      diskIo: Math.round(Math.random() * 10),
+      diskIo: Math.round(Math.random() * 100),
 
       dateTime: utcIsoString,
     });

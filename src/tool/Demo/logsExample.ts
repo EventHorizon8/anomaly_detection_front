@@ -1,22 +1,6 @@
-const dataSet: {
-  timestamp: number,
-  processId: number,
-  threadId: number,
-  parentProcessId: number,
-  userId: number,
-  mountNamespace: number,
-  processName: string,
-  hostName: string,
-  eventId: number,
-  eventName: string,
-  stackAddresses: number[],
-  argsNum: number,
-  returnValue: number,
-  args: string,
-  sus: number,
-  evil: number,
-  isAnomaly: boolean,
-}[] = [
+import {AwsPureLogInterface} from "@/type/AwsLogTypes";
+
+const dataSet: AwsPureLogInterface[] = [
   {
     "timestamp": 129.050634,
     "processId": 382,

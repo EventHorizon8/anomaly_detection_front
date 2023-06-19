@@ -2,6 +2,7 @@
   padding: 10px;
 
   table {
+    min-width: 100%;
     border-collapse: collapse;
     td {
       padding: 5px;
@@ -24,14 +25,23 @@
   }
 
   &__LoadMore {
+    font-family: Tahoma, geneva, sans-serif;
     background: #d1fff5;
     padding: 10px;
+    font-weight: normal;
+    font-size: 14px;
 
     button {
       font-weight: normal;
+      font-size: 14px;
       border: none;
       background: none;
       text-decoration: underline;
+      cursor: pointer;
     }
+  }
+
+  &__Loading {
+    padding: 20px;
   }
 }

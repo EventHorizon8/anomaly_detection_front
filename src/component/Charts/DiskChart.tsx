@@ -6,20 +6,28 @@ import {ClientChartStatsInterface} from "@/type/ClientStatsInterface";
 import moment from "moment";
 
 const DiskChart: React.FC<{
-  title: string,
   chartStats: ClientChartStatsInterface[],
+  clientId: number,
+  handleChartClick: (clientId: number, dateTime: string) => any
 }> = (
   {
-    title,
     chartStats,
+    clientId,
+    handleChartClick,
   }
 ) => {
   const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
   const options: Highcharts.Options = useMemo(() => {
     return {
+      accessibility: {
+        enabled: false,
+      },
       chart: {
         height: '300px',
+        zooming: {
+          type: 'x',
+        },
       },
       title: {
         text: 'Free space',
@@ -67,10 +75,16 @@ const DiskChart: React.FC<{
         data: chartStats.map((statRecord) => statRecord.diskSpace),
         tooltip: {
           valueSuffix: 'GB'
-        }
+        },
+        cursor: 'pointer',
+        events: {
+          click: (event) => {
+            handleChartClick(clientId, chartStats[event.point.x].dateTime);
+          }
+        },
       }]
     }
-  }, [chartStats]);
+  }, [chartStats, clientId, handleChartClick]);
 
   return (
     <HighchartsReact

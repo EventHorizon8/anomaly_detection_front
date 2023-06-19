@@ -1,5 +1,5 @@
 'use client';
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import classes from './Dashboard.module.scss';
 import TopBar from "@/component/layout/TopBar/TopBar";
 import CPUChart from "@/component/Charts/CPUChart";
@@ -8,28 +8,56 @@ import DiskChart from "@/component/Charts/DiskChart";
 import NetworkingChart from "@/component/Charts/NetworkingChart";
 import AuthRequired from "@/component/layout/AuthRequired/AuthRequired";
 import {useAppDispatch, useAppSelector} from "@/hooks/store-hooks";
-import {getClientList, getClientStats} from "@/store/clients/clients-selectors";
+import {getClientList, getClientStats, getClientStatsTimePeriod} from "@/store/clients/clients-selectors";
 import {loadClientList, loadClientStats} from "@/store/clients/clients-thunks";
-import {cleanAllStats} from "@/store/clients/clients-slice";
+import {cleanAllStats, setTimePeriod} from "@/store/clients/clients-slice";
 import moment from "moment";
 import {ClientChartStatsInterface} from "@/type/ClientStatsInterface";
+import clsx from "clsx";
+import {useRouter} from "next/navigation";
+import DiskIoChart from "@/component/Charts/DiskIoChart";
+
+const timeMenu = [
+  {
+    title: '30 мин',
+    value: 30 * 60
+  },
+  {
+    title: '3 часа',
+    value: 3 * 60 * 60
+  },
+  {
+    title: '12 часов',
+    value: 12 * 60 * 60
+  },
+  {
+    title: '24 часов',
+    value: 24 * 60 * 60
+  },
+]
 
 const Dashboard: React.FC = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const clientList = useAppSelector(getClientList);
   const clientStats = useAppSelector(getClientStats);
+  const timePeriod = useAppSelector(getClientStatsTimePeriod);
   const [isLoading, setIsLoading] = useState(false);
-  const [showPeriod, setShowPeriod] = useState('zzz');
 
   useEffect(() => {
-    if (isLoading || !showPeriod || !clientList) {
+    if (isLoading || !timePeriod || !clientList) {
       return;
     }
 
     setIsLoading(true);
-    dispatch(cleanAllStats);
-    dispatch(loadClientStats({ clientIdList: clientList.map((client) => client.id) }));
-  }, [showPeriod, dispatch, isLoading, clientList]);
+    dispatch(cleanAllStats());
+    dispatch(loadClientStats({
+      clientIdList: clientList.map((client) => client.id),
+      timePeriod,
+    })).then(() => {
+      setIsLoading(false);
+    });
+  }, [timePeriod, dispatch, isLoading, clientList]);
 
   useEffect(() => {
     if (!clientList) {
@@ -84,20 +112,38 @@ const Dashboard: React.FC = () => {
     return response;
   }, [clientStats]);
 
+  const handleTimeButtonClick = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
+    const value = parseInt(event.currentTarget.value, 10) || 1800;
+    dispatch(setTimePeriod({ timePeriod: value }));
+  }, [dispatch]);
+
+  const handleChartClick = useCallback((clientId: number, dateTime: string) => {
+    router.push(`/logs?client_id=${clientId}&date_time=${dateTime}`);
+  }, [router]);
+
   return (
     <AuthRequired>
       <TopBar />
       <div className={classes.Dashboard}>
         <div className={classes.Dashboard__Switches}>
-          <button className={classes.Dashboard__Switches_Selected}>30 минут</button>
-          <button>3 часа</button>
-          <button>12 часов</button>
-          <button>24 часа</button>
+          {timeMenu.map((timeOption) => (
+            <button
+              key={timeOption.value}
+              value={timeOption.value}
+              onClick={handleTimeButtonClick}
+              className={clsx({
+                [classes.Dashboard__Switches_Selected]: timeOption.value === timePeriod,
+              })}
+            >
+              {timeOption.title}
+            </button>
+          ))}
         </div>
 
         {clientList && (
           clientList.map((client) => (
             <div key={client.id}>
+              <h1>{client.name}</h1>
               {chartsAndStats[client.id] && (
                 <>
                   <div className={classes.Dashboard__Row}>
@@ -107,19 +153,48 @@ const Dashboard: React.FC = () => {
                       </div>
                       <div className={classes.Dashboard__Chart}>
                         <CPUChart
-                          title="CPU"
                           chartStats={chartsAndStats[client.id]}
+                          clientId={client.id}
+                          handleChartClick={handleChartClick}
                         />
                       </div>
                     </div>
+                    <div className={classes.Dashboard__Cell}>
+                      <div className={classes.Dashboard__Header}>
+                        Memory
+                      </div>
+                      <div className={classes.Dashboard__Chart}>
+                        <MemoryChart
+                          chartStats={chartsAndStats[client.id]}
+                          clientId={client.id}
+                          handleChartClick={handleChartClick}
+                        />
+                      </div>
+                    </div>
+
+                  </div>
+                  <div className={classes.Dashboard__Row}>
                     <div className={classes.Dashboard__Cell}>
                       <div className={classes.Dashboard__Header}>
                         Disk space
                       </div>
                       <div className={classes.Dashboard__Chart}>
                         <DiskChart
-                          title="Disk Space"
                           chartStats={chartsAndStats[client.id]}
+                          clientId={client.id}
+                          handleChartClick={handleChartClick}
+                        />
+                      </div>
+                    </div>
+                    <div className={classes.Dashboard__Cell}>
+                      <div className={classes.Dashboard__Header}>
+                        Disk IO
+                      </div>
+                      <div className={classes.Dashboard__Chart}>
+                        <DiskIoChart
+                          chartStats={chartsAndStats[client.id]}
+                          clientId={client.id}
+                          handleChartClick={handleChartClick}
                         />
                       </div>
                     </div>
@@ -127,23 +202,13 @@ const Dashboard: React.FC = () => {
                   <div className={classes.Dashboard__Row}>
                     <div className={classes.Dashboard__Cell}>
                       <div className={classes.Dashboard__Header}>
-                        Memory
-                      </div>
-                      <div className={classes.Dashboard__Chart}>
-                        <MemoryChart
-                          title="Free RAM"
-                          chartStats={chartsAndStats[client.id]}
-                        />
-                      </div>
-                    </div>
-                    <div className={classes.Dashboard__Cell}>
-                      <div className={classes.Dashboard__Header}>
                         Networking
                       </div>
                       <div className={classes.Dashboard__Chart}>
                         <NetworkingChart
-                          title="Networking IO"
                           chartStats={chartsAndStats[client.id]}
+                          clientId={client.id}
+                          handleChartClick={handleChartClick}
                         />
                       </div>
                     </div>
