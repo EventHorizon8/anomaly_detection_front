@@ -1,5 +1,5 @@
 
-export default interface AccountSliceType {
+export default interface AccountSliceInterface {
   id: number|null,
   name: string,
   email: string,

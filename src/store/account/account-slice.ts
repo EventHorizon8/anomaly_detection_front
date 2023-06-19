@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import AccountSliceType from "@/type/slice/AccountSliceType";
+import AccountSliceInterface from "@/type/slice/AccountSliceInterface";
 import {loadAccountData, login} from "@/store/account/account-thunks";
 import StoreAccessToken from "@/tool/StoreAccessToken";
 
-const initialAccountState: AccountSliceType = {
+const initialAccountState: AccountSliceInterface = {
   id: null,
   name: 'Anonymous',
   email: '',
