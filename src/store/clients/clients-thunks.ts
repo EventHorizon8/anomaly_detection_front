@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
 import { RootState } from "@/store";
 import API from "@/tool/API";
+import {generateClientStatsDemo} from "@/tool/Demo/ClientStatsDemo";
 
 export const loadClientList = createAsyncThunk<
   any,
@@ -22,7 +23,33 @@ export const loadClientList = createAsyncThunk<
       }
 
       return rejectWithValue({
-        errorCode: 'Cannot load client list',
+        errorCode: 'client_list_error',
+        response: error.response.data,
+      });
+    }
+  }
+);
+
+export const loadClientStats = createAsyncThunk<
+  any,
+  { clientIdList: number[]; },
+  { state: RootState }
+>(
+  "client/loadClientStats",
+  async ({ clientIdList }, { rejectWithValue }) => {
+    try {
+      return clientIdList.map((clientId) => ({
+        clientId,
+        stats: generateClientStatsDemo(.5 * 60 * 60, .60),
+      }));
+    } catch (err) {
+      const error = err as AxiosError;
+      if (!error.response) {
+        throw err;
+      }
+
+      return rejectWithValue({
+        errorCode: 'client_stats_error',
         response: error.response.data,
       });
     }

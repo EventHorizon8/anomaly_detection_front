@@ -1,18 +1,22 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import ClientsSliceInterface from "@/type/slice/ClientsSliceInterface";
-import {loadClientList} from "@/store/clients/clients-thunks";
+import {loadClientList, loadClientStats} from "@/store/clients/clients-thunks";
 import ClientInterface from "@/type/ClientInterface";
 import BeClientDataInterface from "@/type/BeData/BeClientDataInterface";
+import {ClientStatsInterface} from "@/type/ClientStatsInterface";
 
 const initialClientsState: ClientsSliceInterface = {
   clientList: null,
+  clientStats: {},
 };
 
 const clientsSlice = createSlice({
   name: "clients",
   initialState: initialClientsState,
   reducers: {
-
+    cleanAllStats: (state) => {
+      state.clientStats = {};
+    },
   },
   extraReducers: (builder) => {
     // Login
@@ -31,11 +35,18 @@ const clientsSlice = createSlice({
         }
       ))
     });
+
+    builder.addCase(loadClientStats.fulfilled, (state, { payload }) => {
+      console.log(payload);
+      payload.forEach(({ clientId, stats}: { clientId: number, stats: ClientStatsInterface}) => {
+        state.clientStats[clientId] = stats;
+      })
+    });
   }
 });
 
 export const {
-
+  cleanAllStats
 } = clientsSlice.actions;
 
 export default clientsSlice.reducer;
