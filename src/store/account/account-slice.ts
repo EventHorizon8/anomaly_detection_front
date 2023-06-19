@@ -1,12 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import AccountSliceType from "@/type/slice/AccountSliceType";
 import {loadAccountData, login} from "@/store/account/account-thunks";
+import StoreAccessToken from "@/tool/StoreAccessToken";
 
 const initialAccountState: AccountSliceType = {
   id: null,
   name: 'Anonymous',
   email: '',
-  accessToken: (localStorage ? localStorage.getItem('access_token') : null) || null,
+  accessToken: StoreAccessToken.get(),
 };
 
 const accountSlice = createSlice({
@@ -18,14 +19,14 @@ const accountSlice = createSlice({
      { payload }: PayloadAction<{accessToken: string}>
     ) => {
       state.accessToken = payload.accessToken;
-      localStorage.setItem('access_token', payload.accessToken);
+      StoreAccessToken.save(payload.accessToken)
     },
     accountCleanup: (state) => {
       state.id = null;
       state.name = 'Anonymous';
       state.email = '';
       state.accessToken = null;
-      localStorage.setItem('access_token', '');
+      StoreAccessToken.clean();
     }
   },
   extraReducers: (builder) => {
@@ -35,7 +36,7 @@ const accountSlice = createSlice({
       state.name = 'Anonymous';
       state.email = '';
       state.accessToken = '';
-      localStorage.setItem('access_token', '');
+      StoreAccessToken.clean();
     });
     builder.addCase(login.fulfilled, (state, { payload }) => {
       state.accessToken = payload.accessToken;
@@ -53,7 +54,7 @@ const accountSlice = createSlice({
       state.name = 'Anonymous';
       state.email = '';
       state.accessToken = '';
-      localStorage.setItem('access_token', '');
+      StoreAccessToken.clean();
     });
   }
 });
