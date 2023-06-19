@@ -5,10 +5,11 @@ import CPUChart from "@/component/Charts/CPUChart";
 import MemoryChart from "@/component/Charts/MemoryChart";
 import DiskChart from "@/component/Charts/DiskChart";
 import NetworkingChart from "@/component/Charts/NetworkingChart";
+import AuthRequired from "@/component/layout/AuthRequired/AuthRequired";
 
 const DashboardPage: React.FC = () => {
   return (
-    <>
+    <AuthRequired>
       <TopBar />
       <div className={classes.Dashboard}>
         <div className={classes.Dashboard__Switches}>
@@ -55,7 +56,7 @@ const DashboardPage: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </AuthRequired>
   )
 };
 
