@@ -45,19 +45,23 @@ const Dashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (isLoading || !timePeriod || !clientList) {
+    console.log({
+      isLoading,
+      timePeriod,
+      clientList
+    });
+    if (!timePeriod || !clientList) {
       return;
     }
 
-    setIsLoading(true);
     dispatch(cleanAllStats());
     dispatch(loadClientStats({
       clientIdList: clientList.map((client) => client.id),
       timePeriod,
     })).then(() => {
-      setIsLoading(false);
+      // setIsLoading(false);
     });
-  }, [timePeriod, dispatch, isLoading, clientList]);
+  }, [timePeriod, dispatch, clientList]);
 
   useEffect(() => {
     if (!clientList) {

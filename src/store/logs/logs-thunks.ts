@@ -3,6 +3,8 @@ import { RootState } from "@/store";
 import {AwsPureLogWithIdInterface} from "@/type/AwsLogTypes";
 import config from "@/config/config";
 import LogsDemo from "@/tool/Demo/LogsDemo";
+import API from "@/tool/API";
+import moment from "moment";
 
 export const loadClientLogsByDateTime = createAsyncThunk<
   {
@@ -18,6 +20,8 @@ export const loadClientLogsByDateTime = createAsyncThunk<
 >(
   "logs/loadClientLogByDateTime",
   async ({ clientId, dateTime }) => {
+    // "/clients/{id}/dashboard/detailed?timestamp_mk_s={timestamp>= request.timestampMkS  limit1000 order by id}
+
     if (config.env.demoMode && (typeof setTimeout !== 'undefined')) {
       // Генерация демонстрационных данных
       console.log('Генерация демонстрационных данных');
@@ -31,11 +35,13 @@ export const loadClientLogsByDateTime = createAsyncThunk<
       }
     }
 
-    // TODO: Получение реальных данных
+    const response = await API.get(
+      `/api/clients/${clientId}/dashboard/detailed?timestamp_mk_s=${moment(dateTime).unix() * 1000}`
+    );
     return {
       clientId,
       dateTime,
-      logs: [],
+      logs: response.data,
     }
   }
 );
@@ -74,10 +80,12 @@ export const loadEarlierClientLogs = createAsyncThunk<
       }
     }
 
-    // TODO: Получение реальных данных
+    const response = await API.get(
+      `/api/clients/${clientId}/dashboard/detailed?to_id=${logId}`
+    );
     return {
       clientId,
-      earlierLogs: [],
+      earlierLogs: response.data,
     }
   }
 );
@@ -116,10 +124,12 @@ export const loadOlderClientLogs = createAsyncThunk<
       }
     }
 
-    // TODO: Получение реальных данных
+    const response = await API.get(
+      `/api/clients/${clientId}/dashboard/detailed?from_id=${logId}`
+    );
     return {
       clientId,
-      olderLogs: [],
+      olderLogs: response.data,
     }
   }
 );
